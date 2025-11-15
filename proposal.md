@@ -116,6 +116,10 @@ It will then apply a set of **rule-based heuristics** to generate a packing list
 
 We will initially **hard-code** these rules in Python but keep them organized and well-documented so they can be refined later if we have time.
 
+### Optimization and Outfit Logic
+
+We plan to “automatically generate an optimized packing checklist and suggested outfits” using **rule-based logic** driven by weather and trip length. First, we will bucket each day into climate categories (for example, cold/dry, cold/rainy, mild, or hot) based on temperature and precipitation thresholds. Then, for each category, we will map to clothing needs (such as *one base layer + one mid-layer + one outer layer* for cold days, or *one light top + one bottom* for hot days) and scale item counts with trip length while capping them to encourage re-wear. For instance, we might use rules like `shirts = ceil(days / 2)`, `underwear = days`, and `shoes = 1–2` depending on activities. In this context, “optimized” means covering all expected weather scenarios and activities with the **fewest reasonable items**, reducing overpacking while still being practical. Finally, the outfit feature will assemble these items into day-by-day combinations by pulling from the appropriate category sets (for example, a “cold rainy hiking outfit” would be built from a warm base layer, a fleece or mid-layer, a waterproof shell, hiking pants, and waterproof shoes).
+
 Once the weather interpretation and packing logic modules are working in isolation, we will build the **command-line interface (CLI)** that ties everything together. The CLI will:
 
 1. Guide the user through entering their destination, trip dates, and planned activities  
@@ -206,7 +210,8 @@ Finally, there is always the possibility of **unexpected bugs or integration iss
 
 There are several topics from the course, or closely related to it, that would be particularly helpful for this project.
 
-Additional examples of working with **external APIs in Python**, especially those that involve parsing nested JSON and handling different types of errors, would reinforce what we need to do for the weather integration. Guidance on **organizing larger Python programs** into multiple files and modules in a clean, maintainable way would also support our efforts to structure the project well.
+Additional examples of working with **external APIs in Python**, especially those that
+involve parsing nested JSON and handling different types of errors, would reinforce what we need to do for the weather integration. Guidance on **organizing larger Python programs** into multiple files and modules in a clean, maintainable way would also support our efforts to structure the project well.
 
 It would also be useful to see more about **basic testing strategies** for Python programs of this size. For instance, short demonstrations of how to write and run simple unit tests or how to separate logic from input/output to make testing easier would help us ensure our packing rules behave as expected.
 
