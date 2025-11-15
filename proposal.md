@@ -10,17 +10,20 @@
 
 Both Thomas and Astrid have studied abroad where they faced a lot of traveling around Europe very frequently. Although traveling is exciting, packing is universally painful—people overpack, forget essentials, misunderstand weather patterns, and waste time second-guessing what to bring. 
 
-Especially when Thomas was studying abroad in London, he was unaware that places in Europe use a different type of electrical cord plug and therefore he was unable to charge his devices when he was traveling in Europe for the first time. Another time, Thomas packed a lot of heavy winter clothes when he traveled to Tenerife during the winter but realized that Tenerife is tropical all year round after he landed. Astrid encountered a lot of the similar issues when she traveled in Barcelona where traveling within Europe requires a lot of preparation and flights usually do not allow a lot of luggage and therefore packing efficiently will be very important.
+Especially when Thomas was studying abroad in London, he was unaware that places in Europe use a different type of electrical cord plug and therefore he was unable to charge his devices when he was traveling in Europe for the first time. Another time, Thomas packed a lot of heavy winter clothes when he traveled to Tenerife during the winter but realized that Tenerife is tropical all year round after he landed. Astrid experienced many similar challenges while studying abroad in Barcelona，where traveling within Europe required extensive planning. Budget-friendly flights often came with strict luggage restrictions, making it essential to pack efficiently within a carry-on.
 
 Our project aims to solve this problem with an **AI Trip Packing Assistant**: a Python-based tool that automatically generates a smart, optimized packing list for any trip. Rather than relying on generic online lists, our assistant will tailor recommendations to the user’s specific destination, dates, and planned activities.
 
-The core idea is that the user will input their **destination**, **trip dates**, and a brief description of **planned activities**, for example:
+The core idea is that the user will input their destination and trip dates, and then select their planned activities from a multiple-choice list of common travel purposes. Users may choose more than one option, since a single trip can involve multiple types of activities. The initial activity options will include:
 
-- “city sightseeing”  
-- “hiking”  
-- “business meetings”  
-- “playing volleyball”  
-- “beach vacation”  
+A. City sightseeing
+B. Hiking or outdoor excursions
+C. Business meetings or formal events
+D. Sports or recreational activities (e.g., volleyball)
+E. Beach or pool vacation
+Etc...
+
+This structured activity selection will help the program tailor packing recommendations more accurately.
 
 Once this information is provided, the program will:
 
@@ -73,7 +76,12 @@ This will also be the **first time** Thomas and Astrid have created an extensive
 
 At an **individual** level:
 
-- **Astrid** would like to focus more heavily on the *backend logic* of the project. This includes learning how to design and implement decision rules that map weather and activity inputs into packing recommendations, exploring different ways to represent these rules in code, and improving skills in writing testable functions.  
+- **Astrid** would like to focus more heavily on the *backend logic* of the project. This includes:
+  - Implementing and testing the weather API integration (fetching and parsing forecast/climate data).
+  - Designing and refining decision rules that map weather, trip length, and activity inputs into packing recommendations.
+  - Exploring different ways to represent these rules in code (e.g., configuration dictionaries, helper functions, or simple classes).
+  - Improving skills in writing *testable* functions, with clear inputs/outputs and sample cases for validation.
+
 
 - **Thomas** is especially interested in working with *external services and output formatting*. This includes getting comfortable with making HTTP requests, handling potential errors or missing data from APIs, and then transforming program output into user-friendly formats such as nicely structured terminal text and, if possible, PDF files.  
 
@@ -215,4 +223,9 @@ involve parsing nested JSON and handling different types of errors, would reinfo
 
 It would also be useful to see more about **basic testing strategies** for Python programs of this size. For instance, short demonstrations of how to write and run simple unit tests or how to separate logic from input/output to make testing easier would help us ensure our packing rules behave as expected.
 
+Also, we would like to learn more about **web design and basic front-end concepts**, especially how to present our Python logic through a simple but polished web interface using tools like Flask with HTML/CSS templates. Understanding how to structure routes and templates, separate logic from presentation, and apply basic layout and UX patterns would help make our MVP more intuitive, visually appealing, and user-friendly.
+
+We also want to improve our ability to **build clean, user-friendly input forms and outputs**. Learning how to design minimal input fields (destination, dates, trip type), validate user errors gracefully, and format the final packing recommendations in a clear, organized layout—possibly with icons, grouped sections, or small visual cues—would make the tool easier to use and feel more like a real product.
+
 Finally, if time permits in the course, a brief introduction or pointer to libraries for tasks like **PDF generation** or lightweight web development (such as **Flask**) would give us more confidence in attempting our stretch goals. Even high-level guidance on when to use such tools and common pitfalls to avoid would be valuable as we move from a simple script toward something that feels more like a real application.
+
