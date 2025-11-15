@@ -10,7 +10,7 @@
 
 Both Thomas and Astrid have studied abroad where they faced a lot of traveling around Europe very frequently. Although traveling is exciting, packing is universally painful—people overpack, forget essentials, misunderstand weather patterns, and waste time second-guessing what to bring. 
 
-Especially when Thomas was studying abroad in London, he was unaware that places in Europe use a different type of electrical cord plug and therefore he was unable to charge his devices when he was traveling in Europe for the first time. Another time, Thomas packed a lot of heavy winter clothes when he traveled to Tenerife during the winter but realized that Tenerife is tropical all year round after he landed.  
+Especially when Thomas was studying abroad in London, he was unaware that places in Europe use a different type of electrical cord plug and therefore he was unable to charge his devices when he was traveling in Europe for the first time. Another time, Thomas packed a lot of heavy winter clothes when he traveled to Tenerife during the winter but realized that Tenerife is tropical all year round after he landed. Astrid encountered a lot of the similar issues when she traveled in Barcelona where traveling within Europe requires a lot of preparation and flights usually do not allow a lot of luggage and therefore packing efficiently will be very important.
 
 Our project aims to solve this problem with an **AI Trip Packing Assistant**: a Python-based tool that automatically generates a smart, optimized packing list for any trip. Rather than relying on generic online lists, our assistant will tailor recommendations to the user’s specific destination, dates, and planned activities.
 
