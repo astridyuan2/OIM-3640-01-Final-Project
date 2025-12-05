@@ -1,77 +1,68 @@
-# # weather_api.py
+import json
+import os
+import urllib.request
+import urllib.parse
+from dotenv import load_dotenv
 
-# def fetch_weather(location: str, start_date: str, end_date: str) -> dict:
-#     """
-#     Fetch weather data for a given location and date range.
+# Load environment variables from .env file
+load_dotenv()
+APIKEY = os.getenv("OPENWEATHER_API_KEY")
+BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
-#     Args:
-#         location: City name or "City, Country".
-#         start_date: 'YYYY-MM-DD'
-#         end_date: 'YYYY-MM-DD'
-
-#     Returns:
-#         Dict containing cleaned weather data, e.g.
-#         {
-#             "dates": [...],
-#             "max_temp": [...],
-#             "min_temp": [...],
-#             "precip_prob": [...]
-#         }
-
-#     Raises:
-#         ValueError if location/date is invalid or API fails.
-#     """
-#     ...
-
-
-
-import requests
-
-BASE_URL = "https://api.open-meteo.com/v1/forecast"
-
-def fetch_weather(location: str, start_date: str, end_date: str) -> dict:
+def fetch_weather(city, country_code="us", units="imperial"):
     """
-    For MVP: assume location is a city with known coordinates (hardcode a few examples)
-    or you can add a simple dictionary mapping.
-
-    For now, this function just demonstrates structure.
+    Fetch current weather data for a given city using OpenWeatherMap API.
+    
+    Args:
+        city (str): City name (e.g., "New York", "São Paulo").
+        country_code (str): Country code (default: 'us').
+        units (str): 'imperial' for °F, 'metric' for °C, 'standard' for Kelvin.
+    
+    Returns:
+        dict: Parsed weather data including temperature, humidity, description.
     """
-    # TODO: replace with real geocoding or a mapping dict
-    city_coords = {
-        "Barcelona": (41.3851, 2.1734),
-        "London": (51.5074, -0.1278),
-        "Tenerife": (28.2916, -16.6291),
+    if not APIKEY:
+        raise ValueError("Missing OpenWeatherMap API key. Set OPENWEATHER_API_KEY in your .env file.")
+
+    # Build query with proper URL encoding
+    query = {
+        "q": f"{city},{country_code}".strip(),
+        "APPID": APIKEY,
+        "units": units
     }
+    url = f"{BASE_URL}?{urllib.parse.urlencode(query)}"
 
-    if location not in city_coords:
-        raise ValueError(f"Unsupported location in MVP: {location}")
+    try:
+        with urllib.request.urlopen(url) as response:
+            response_text = response.read().decode("utf-8")
+            weather_data = json.loads(response_text)
+    except Exception as e:
+        raise RuntimeError(f"Failed to fetch weather data: {e}")
 
-    lat, lon = city_coords[location]
-
-    params = {
-        "latitude": lat,
-        "longitude": lon,
-        "start_date": start_date,
-        "end_date": end_date,
-        "daily": ["temperature_2m_max", "temperature_2m_min", "precipitation_probability_max"],
-        "timezone": "auto",
-    }
-
-    response = requests.get(BASE_URL, params=params, timeout=10)
-
-    if response.status_code != 200:
-        raise ValueError(f"Weather API error: {response.status_code}")
-
-    data = response.json()
-    daily = data.get("daily", {})
+    # Basic API error handling (e.g., city not found)
+    if str(weather_data.get("cod")) != "200":
+        message = weather_data.get("message", "Unknown error")
+        raise ValueError(f"API error (cod={weather_data.get('cod')}): {message}")
 
     return {
-        "dates": daily.get("time", []),
-        "max_temp": daily.get("temperature_2m_max", []),
-        "min_temp": daily.get("temperature_2m_min", []),
-        "precip_prob": daily.get("precipitation_probability_max", []),
+        "city": weather_data["name"],
+        "temperature": weather_data["main"]["temp"],
+        "humidity": weather_data["main"]["humidity"],
+        "description": weather_data["weather"][0]["description"]
     }
 
+def main():
+    city = input("Enter a city name: ").strip()
+    country_code = (input("Enter country code (default 'us'): ").strip() or "us").lower()
 
+    try:
+        weather = fetch_weather(city, country_code=country_code, units="imperial")
+        print(f"\nWeather in {weather['city']}:")
+        print(f"Temperature: {weather['temperature']}°F")
+        print(f"Humidity: {weather['humidity']}%")
+        print(f"Conditions: {weather['description']}")
+    except Exception as e:
+        print(f"[error] {e}")
 
-
+if __name__ == "__main__":
+    main()
