@@ -19,7 +19,8 @@ def fetch_weather(city, country_code="us", units="imperial"):
         units (str): 'imperial' for °F, 'metric' for °C, 'standard' for Kelvin.
     
     Returns:
-        dict: Parsed weather data including temperature, humidity, description.
+        dict: Parsed weather data including temperature, feels_like, humidity,
+              description, visibility, timezone, and snow volume if available.
     """
     if not APIKEY:
         raise ValueError("Missing OpenWeatherMap API key. Set OPENWEATHER_API_KEY in your .env file.")
@@ -44,11 +45,24 @@ def fetch_weather(city, country_code="us", units="imperial"):
         message = weather_data.get("message", "Unknown error")
         raise ValueError(f"API error (cod={weather_data.get('cod')}): {message}")
 
+    # Extract optional fields safely
+    feels_like = weather_data["main"].get("feels_like")
+    visibility = weather_data.get("visibility")  # in meters
+    timezone = weather_data.get("timezone")      # shift in seconds from UTC
+    snow = None
+    if "snow" in weather_data:
+        # API may provide "snow": {"1h": value, "3h": value}
+        snow = weather_data["snow"].get("1h") or weather_data["snow"].get("3h")
+
     return {
         "city": weather_data["name"],
         "temperature": weather_data["main"]["temp"],
+        "feels_like": feels_like,
         "humidity": weather_data["main"]["humidity"],
-        "description": weather_data["weather"][0]["description"]
+        "description": weather_data["weather"][0]["description"],
+        "visibility": visibility,
+        "timezone": timezone,
+        "snow": snow
     }
 
 def main():
@@ -56,13 +70,38 @@ def main():
     country_code = (input("Enter country code (default 'us'): ").strip() or "us").lower()
 
     try:
+        # Fetch in Fahrenheit
         weather = fetch_weather(city, country_code=country_code, units="imperial")
+        temp_f = weather["temperature"]
+        temp_c = round((temp_f - 32) * 5 / 9, 1)
+
+        feels_f = weather["feels_like"]
+        feels_c = round((feels_f - 32) * 5 / 9, 1) if feels_f is not None else None
+
+        # Convert timezone offset (seconds) into UTC±hours
+        tz_offset = weather["timezone"]
+        tz_hours = tz_offset // 3600 if tz_offset is not None else None
+
         print(f"\nWeather in {weather['city']}:")
-        print(f"Temperature: {weather['temperature']}°F")
+        print(f"Temperature: {temp_f}°F / {temp_c}°C")
+        if feels_c is not None:
+            print(f"Feels like: {feels_f}°F / {feels_c}°C")
+        else:
+            print("Feels like: N/A")
         print(f"Humidity: {weather['humidity']}%")
         print(f"Conditions: {weather['description']}")
+        print(f"Visibility: {weather['visibility']} meters" if weather['visibility'] is not None else "Visibility: N/A")
+        if tz_hours is not None:
+            print(f"Timezone: UTC{tz_hours:+d}")
+        else:
+            print("Timezone: N/A")
+        if weather["snow"] is not None:
+            print(f"Snow volume: {weather['snow']} mm")
+        else:
+            print("Snow volume: N/A")
     except Exception as e:
         print(f"[error] {e}")
+
 
 if __name__ == "__main__":
     main()
